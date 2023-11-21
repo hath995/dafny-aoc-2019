@@ -634,7 +634,7 @@ module RegEx {
         expect m5 == true, "test 5 failed";
     }
 
-    method Main() 
+    method MainTest() 
         decreases *
     {
         // var test := re2post("a(a+be*)(c|(d)|f)g");

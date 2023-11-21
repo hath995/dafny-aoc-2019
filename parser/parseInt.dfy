@@ -25,7 +25,8 @@ module ParseInt {
         {
             if ns[i] == '-' {
                 negative := true;
-            }else {
+            }else if 48 <= (ns[i] as int) < 58 {
+                print ns[i], ns[i] as int;
                 ret := ret + ((ns[i] as int) - 48) * power(10, |ns|-(i+1));
             }
         }
