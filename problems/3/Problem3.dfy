@@ -143,4 +143,6 @@ module Problem3 {
         var dist := findFastest(data);
         return dist;
     }
+
+    export provides problem3_1, problem3_2
 }

@@ -63,4 +63,6 @@ module Problem4 {
             }
         }
     }
+    
+    export provides problem4_1, problem4_2
 }

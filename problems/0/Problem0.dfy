@@ -33,4 +33,6 @@ module Problem0 {
         } 
         return -1;
     }
+    
+    export provides problem0_1, problem0_2
 }

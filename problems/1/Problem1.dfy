@@ -37,4 +37,6 @@ module Problem1 {
         print partial;
         return sum(partial);
     }
+
+    export provides problem1_1, problem1_2
 }

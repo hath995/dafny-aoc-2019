@@ -1,3 +1,4 @@
+include "../libraries/src/dafny/Collections/Seqs.dfy"
 module ParseInt {
     import Dafny.Collections.Seq
     function power(x: int, i: nat): int {
@@ -13,6 +14,16 @@ module ParseInt {
 
     function Integer(ns: string): int {
         integerHelper(Seq.Filter(x => 48 <= (x as int) < 58,ns), 0, false)
+    }
+
+    function String(x: int): string {
+        if x == 0 then "0" else if x < 0 then "-"+StringHelper(0-x, "") else StringHelper(x, "")
+    }
+
+    function StringHelper(x: int, res: string): string 
+        requires x >= 0
+    {
+        if x== 0 then res else StringHelper(x/10, [numchars()[x%10]]+res)
     }
 
     method toInt(ns: string) returns (ret: int) 
@@ -38,10 +49,14 @@ module ParseInt {
 
     method toStr(num: int) returns (ret: string)
         ensures isNumString(ret)
+        // ensures ret == String(num)
     {
         var lookup := numchars();
         ret := "";
         var i := num;
+        if num == 0 {
+            return "0";
+        }
         if num < 0 {
             ret := "-";
             i := 0 - num;
@@ -73,6 +88,6 @@ module ParseInt {
     }
 
     export
-        provides Integer
+        provides Integer, String
         provides toInt, toStr, isNumString
 }

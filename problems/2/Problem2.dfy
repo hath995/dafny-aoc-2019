@@ -85,4 +85,6 @@ module Problem2 {
         }
         x := -1;
     }
+    
+    export provides problem2_1, problem2_2
 }

@@ -1,7 +1,7 @@
 include "../libraries/src/Wrappers.dfy"
 
 module Parser {
-    import opened Wrappers
+    import Wrappers
     datatype ParserState<T> = State(index: nat, targetString: string, result: Option<T>, isError: bool, error: string)
     type Parser<!T> = (ParserState<T>) -> ParserState<T>
 

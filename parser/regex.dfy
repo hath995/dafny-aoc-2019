@@ -2,7 +2,7 @@
 //based on https://swtch.com/~rsc/regexp/regexp1.html
 include "../libraries/src/Wrappers.dfy"
 module RegEx {
-    import opened Wrappers
+    import Wrappers
     datatype RegexPiece = Char(value: char) | GroupStart(id: nat) | GroupEnd(id: nat) | Plus | Star | Optional | Alt | Concat | WildChar
     datatype Paren = Paren(natom: int, nalt: int)
     function RegToChar(re: RegexPiece): char {
@@ -19,7 +19,7 @@ module RegEx {
         }
     }
 
-    method re2post(re: string) returns (res: Result<seq<RegexPiece>, string>) {
+    method re2post(re: string) returns (res: Wrappers.Result<seq<RegexPiece>, string>) {
         var buf := [];
         var nalt := 0;
         var natom := 0;
@@ -65,7 +65,7 @@ module RegEx {
                 }
                 case '|' => {
                     if natom == 0 {
-                        return Failure("Missing atom");
+                        return Wrappers.Failure("Missing atom");
                     }
                     natom := natom - 1;
                     while natom > 0 {
@@ -76,7 +76,7 @@ module RegEx {
                 }
                 case ')' => {
                     if |parens| == 0 || |groups| == 0 || natom == 0 {
-                        return Failure("missing atom or paren");
+                        return Wrappers.Failure("missing atom or paren");
                     }
                     natom := natom - 1;
                     while natom > 0 {
@@ -103,19 +103,19 @@ module RegEx {
                 }
                 case '*' => {
                     if natom == 0 {
-                        return Failure("Missing atom");
+                        return Wrappers.Failure("Missing atom");
                     }
                     buf := buf + [Star];
                 }
                 case '+' => {
                     if natom == 0 {
-                        return Failure("Missing atom");
+                        return Wrappers.Failure("Missing atom");
                     }
                     buf := buf + [Plus];
                 }
                 case '?' => {
                     if natom == 0 {
-                        return Failure("Missing atom");
+                        return Wrappers.Failure("Missing atom");
                     }
                     buf := buf + [Optional];
                 }
@@ -130,7 +130,7 @@ module RegEx {
             }
         }
         if |parens| != 0 {
-            return Failure("Missing )");
+            return Wrappers.Failure("Missing )");
         }
         natom := natom - 1;
         while natom > 0 {
@@ -141,7 +141,7 @@ module RegEx {
             buf := buf + [Alt];
             nalt := nalt - 1;
         }
-        return Success(buf);
+        return Wrappers.Success(buf);
     }
     datatype MatchKind = Split | Match | Wild | MatchChar(c: char) {
         function GetChar(): char
@@ -407,11 +407,11 @@ module RegEx {
         return e.start;
     }
 
-    method addstate(l: seq<State>, s: State?) returns (res: Result<seq<State>, string>)
+    method addstate(l: seq<State>, s: State?) returns (res: Wrappers.Result<seq<State>, string>)
         decreases *
     {
         if s == null {
-            return Failure("Added state was null");
+            return Wrappers.Failure("Added state was null");
         } else if s!=null && s.c.Split? {
             var next := addstate(l, s.out);
             if next.Success? {
@@ -421,7 +421,7 @@ module RegEx {
             }
             
         } else {
-            return Success(l+[s]);
+            return Wrappers.Success(l+[s]);
         }
     }
 
